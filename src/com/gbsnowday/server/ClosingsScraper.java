@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Corey Rowe
+ * Copyright 2014-2017 Corey Rowe
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,5 @@
 
 package com.gbsnowday.server;
 
-/**
- * Organize weather and closings information into consumable JSON feeds.
- * Runs as a command-line application for easy cron scheduling.
- */
-public class Main {
-
-    public static void main(String[] args) {
-
-    }
+class ClosingsScraper {
 }
