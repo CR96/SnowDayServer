@@ -24,6 +24,10 @@ package com.gbsnowday.server;
 public class Main {
 
     public static void main(String[] args) {
-
+        String closingsJson = new ClosingsScraper()
+            .getClosingsJson(
+                "http://abc12.com/weather/closings",
+                10000
+        );
     }
 }
