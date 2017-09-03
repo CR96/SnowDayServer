@@ -29,5 +29,11 @@ public class Main {
                 "http://abc12.com/weather/closings",
                 10000
         );
+
+        String weatherJson = new WeatherScraper()
+            .getWeatherJson(
+                "http://alerts.weather.gov/cap/wwaatmget.php?x=MIZ061&amp;y=0",
+                10000
+        );
     }
-}
+}q
