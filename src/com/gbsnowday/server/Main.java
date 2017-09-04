@@ -17,13 +17,20 @@
 
 package com.gbsnowday.server;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 /**
  * Organize weather and closings information into consumable JSON feeds.
  * Runs as a command-line application for easy cron scheduling.
  */
 public class Main {
 
-    public static void main(String[] args) {
+    private static final String JSON_PATH = "/var/www/snowday/html/api";
+
+    public static void main(String[] args) throws IOException {
+
         String closingsJson = new ClosingsScraper()
             .getClosingsJson(
                 "http://abc12.com/weather/closings",
@@ -35,5 +42,8 @@ public class Main {
                 "http://alerts.weather.gov/cap/wwaatmget.php?x=MIZ061&amp;y=0",
                 10000
         );
+
+        Files.write(Paths.get(JSON_PATH + "closings.json"), closingsJson.getBytes());
+        Files.write(Paths.get(JSON_PATH + "weather.json"), weatherJson.getBytes());
     }
-}q
+}
