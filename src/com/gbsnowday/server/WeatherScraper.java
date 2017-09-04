@@ -33,6 +33,7 @@ import java.util.Locale;
 class WeatherScraper {
 
     // A single weather warning
+    @SuppressWarnings("unused") //Serialized to json using Gson
     private class Warning {
         private String title;
         private String expireTime;
