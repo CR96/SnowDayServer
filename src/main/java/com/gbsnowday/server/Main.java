@@ -27,7 +27,7 @@ import java.nio.file.Paths;
  */
 public class Main {
 
-    private static final String JSON_PATH = "/var/www/snowday/html/api";
+    private static final String JSON_PATH = "/var/www/snowday/html/api/";
 
     public static void main(String[] args) throws IOException {
 
