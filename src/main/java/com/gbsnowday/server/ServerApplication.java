@@ -35,7 +35,7 @@ import java.nio.file.Paths;
 @SpringBootApplication
 public class ServerApplication {
 
-    private static final String JSON_PATH = "/var/www/gbsnowday/html/api/";
+    private static final String JSON_PATH = "/opt/snowdayserver/";
 
     public static void main(String[] args) throws IOException {
 
