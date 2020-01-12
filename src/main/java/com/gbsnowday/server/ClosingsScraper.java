@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2017 Corey Rowe
+ * Copyright 2014-2020 Corey Rowe
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,21 @@
  * limitations under the License.
  */
 
-
 package com.gbsnowday.server;
 
-import com.google.gson.Gson;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import com.gbsnowday.server.model.closings.ClosingRecord;
 
-import java.io.IOException;
+import com.google.gson.Gson;
+
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 class ClosingsScraper {
 
-    private class Closing {
+    private static class Closing {
         String name;
         String status;
         boolean closedToday;
@@ -49,58 +46,32 @@ class ClosingsScraper {
             .getDayOfWeek()
             .getDisplayName(TextStyle.FULL, Locale.US);
 
-    private boolean closedToday(String orgStatus, String weekdayToday) {
-        return (orgStatus.contains("Closed " + weekdayToday)
+    private boolean closedToday(String orgStatus) {
+        return (orgStatus.contains("Closed " + ClosingsScraper.WEEKDAY_TODAY)
                 || orgStatus.contains("Closed Today"));
     }
 
-    private boolean closedTomorrow(String orgStatus, String weekdayTomorrow) {
-        return (orgStatus.contains("Closed " + weekdayTomorrow)
+    private boolean closedTomorrow(String orgStatus) {
+        return (orgStatus.contains("Closed " + ClosingsScraper.WEEKDAY_TOMORROW)
                 || orgStatus.contains("Closed Tomorrow"));
     }
 
     @SuppressWarnings("SameParameterValue") // Setting all "breakable" variables in main class so they're in one place
-    String getClosingsJson(String url, int timeout) {
-        ArrayList<Closing> closings = new ArrayList<>();
-        Document schools = null;
-        try {
-            schools = Jsoup.connect(
-                    url)
-                    .timeout(timeout)
-                    .get();
+    String buildCustomClosingsJson(List<ClosingRecord> closingRecord) {
 
-            Element table = schools
-                    .select("table")
-                    .last();
-            Elements rows = table.select("tr");
+        List<Closing> customClosings = new ArrayList<>();
 
-            for (int i = 1; i < rows.size(); i++) { // Skip header row
-                Element row = rows.get(i);
-
-                Closing closing = new Closing();
-                closing.name = row.select("td").get(0).text();
-                closing.status = row.select("td").get(1).text();
-                closing.closedToday = closedToday(closing.status, WEEKDAY_TODAY);
-                closing.closedTomorrow = closedTomorrow(closing.status, WEEKDAY_TOMORROW);
-                closings.add(closing);
-            }
-
-            return new Gson().toJson(closings);
-
-        } catch (IOException e) {
-            // Connectivity issues
-            return "ioexception";
-        } catch (NullPointerException | IndexOutOfBoundsException e) {
-            // This shows in place of the table (as plain text)
-            // if no schools or institutions are closed.
-            if (schools != null
-                    && !schools.text().contains("no closings or delays")) {
-                // Webpage layout was not recognized.
-                return "nullpointerexception";
-            }else{
-                return "none";
-            }
+        //noinspection ForLoopReplaceableByForEach
+        for (int i = 0; i < closingRecord.size(); i++) {
+            Closing closing = new Closing();
+            closing.name = closingRecord.get(i).getForcedOrganizationName();
+            closing.status = closingRecord.get(i).getForcedStatusName();
+            closing.closedToday = closedToday(closing.status);
+            closing.closedTomorrow = closedTomorrow(closing.status);
+            customClosings.add(closing);
         }
+
+        return new Gson().toJson(customClosings);
     }
 
 }

@@ -65,6 +65,7 @@ runBuild.finalizedBy(copyTask)
 dependencies {
 	compile('com.google.code.gson:gson:2.8.4')
 	compile('org.jsoup:jsoup:1.11.3')
+	compile group: 'commons-io', name: 'commons-io', version: '2.5'
 
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
