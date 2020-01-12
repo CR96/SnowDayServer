@@ -78,7 +78,7 @@ public class ServerApplication {
             Gson gson = new Gson();
             ClosingInfo closingInfo = gson.fromJson(jsonArray.get(0), ClosingInfo.class);
 
-            String customClosingsJson = new ClosingsScraper()
+            String customClosingsJson = new ClosingsParser()
                 .buildCustomClosingsJson(closingInfo.getClosingRecord());
 
             String weatherJson = new WeatherScraper()

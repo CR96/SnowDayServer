@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-class ClosingsScraper {
+class ClosingsParser {
 
     private static class Closing {
         String name;
@@ -47,12 +47,12 @@ class ClosingsScraper {
             .getDisplayName(TextStyle.FULL, Locale.US);
 
     private boolean closedToday(String orgStatus) {
-        return (orgStatus.contains("Closed " + ClosingsScraper.WEEKDAY_TODAY)
+        return (orgStatus.contains("Closed " + ClosingsParser.WEEKDAY_TODAY)
                 || orgStatus.contains("Closed Today"));
     }
 
     private boolean closedTomorrow(String orgStatus) {
-        return (orgStatus.contains("Closed " + ClosingsScraper.WEEKDAY_TOMORROW)
+        return (orgStatus.contains("Closed " + ClosingsParser.WEEKDAY_TOMORROW)
                 || orgStatus.contains("Closed Tomorrow"));
     }
 
